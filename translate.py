@@ -1,6 +1,7 @@
 """Translate FASTA sequences and calculate protein statistics."""
 
 import importlib
+plt = importlib.import_module("matplotlib.pyplot")
 
 pd = importlib.import_module("pandas")
 ProteinAnalysis = importlib.import_module("Bio.SeqUtils.ProtParam").ProteinAnalysis
@@ -80,7 +81,7 @@ for record in aa_sequences:
     if ambiguous_count > 0:
         continue  # skip sequences with ambiguous sites
 
-    aa_freqs = prot.get_amino_acids_percent()
+    aa_freqs = prot.amino_acids_percent
 
     row = {
         "name": record.name,
@@ -93,6 +94,22 @@ for record in aa_sequences:
     }
     row.update(aa_freqs)
     results.append(row)
+
+    # -----------------------------
+# Plot Sequence Length vs Molecular Weight
+# -----------------------------
+df = pd.DataFrame(results)
+
+if not df.empty:
+    plt.figure(figsize=(8, 5))
+    plt.scatter(df["length"], df["molecular_weight"], alpha=0.75)
+    plt.title("Sequence Length vs Molecular Weight")
+    plt.xlabel("Sequence Length (amino acids)")
+    plt.ylabel("Molecular Weight (Da)")
+    plt.grid(True, linestyle="--", alpha=0.5)
+    plt.tight_layout()
+    plt.show()
+
 # -----------------------------
 # END
 # -----------------------------
