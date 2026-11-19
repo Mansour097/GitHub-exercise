@@ -10,8 +10,8 @@ SeqIO = importlib.import_module("Bio.SeqIO")
 # -----------------------------
 # Read sequences
 # -----------------------------
-
-FILE_PATH = "input.fas"
+# Set this to the path of the input FASTA file.
+FILE_PATH = input("Enter the input FASTA file path: ")
 sequences = list(SeqIO.parse(FILE_PATH, "fasta"))
 
 # -----------------------------
@@ -93,10 +93,6 @@ for record in aa_sequences:
     }
     row.update(aa_freqs)
     results.append(row)
-
-df = pd.DataFrame(results)
-print(df.head())
-
 # -----------------------------
 # END
 # -----------------------------
