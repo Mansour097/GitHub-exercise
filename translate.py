@@ -1,16 +1,18 @@
-import pandas as pd
-from Bio.SeqUtils.ProtParam import ProteinAnalysis
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
-from scipy.stats import linregress
+"""Translate FASTA sequences and calculate protein statistics."""
 
+import importlib
+
+pd = importlib.import_module("pandas")
+ProteinAnalysis = importlib.import_module("Bio.SeqUtils.ProtParam").ProteinAnalysis
+Seq = importlib.import_module("Bio.Seq").Seq
+SeqRecord = importlib.import_module("Bio.SeqRecord").SeqRecord
+SeqIO = importlib.import_module("Bio.SeqIO")
 # -----------------------------
 # Read sequences
 # -----------------------------
 
-file_path = "input.fas"
-sequences = list(SeqIO.parse(file_path, "fastaa"))
+FILE_PATH = "input.fas"
+sequences = list(SeqIO.parse(FILE_PATH, "fasta"))
 
 # -----------------------------
 # Translate DNA sequences to proteins (longest ORF)
@@ -35,7 +37,7 @@ for record in sequences:
         # Split translated protein at stop codons ("*").
         # This gives fragments of amino acids between stop codons.
         fragments = str(protein).split("*")
-        longest_in_frame = maxx(fragments, key=len)
+        longest_in_frame = max(fragments, key=len)
 
         # Keep track of the longest ORF found so far across all frames
         if len(longest_in_frame) > len(best_orf):
